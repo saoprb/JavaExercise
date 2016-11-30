@@ -14,6 +14,10 @@ public class ThisTest {
         System.out.println("bar");
     }
 
+    public static String barBar() {
+        return "bar bar";
+    }
+
     public void fooBar() {
         System.out.format("%s: foobar", this.getClass().getName());
     }
@@ -23,5 +27,7 @@ public class ThisTest {
         app.test1(null);
         ThisTest.bar();
         app.fooBar();
+        ThisTest nullApp = null;
+        System.out.println(nullApp.barBar());
     }
 }
