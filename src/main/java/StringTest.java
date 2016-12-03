@@ -17,6 +17,13 @@ public class StringTest {
 
         System.out.println("a.equals(d): " + a.equals(d));
         System.out.println("a == d: " + (a == d));
+
+        String abcString = new String("abc");
+        StringBuffer abcBuffer = new StringBuffer();
+        abcBuffer.append("abc");
+
+        System.out.println("abcString.equals(abcBuffer): " + abcString.equals(abcBuffer));
+        System.out.println("abcString.equals(abcBuffer.toString()): " + abcString.equals(abcBuffer.toString()));
     }
 
     public static void main(String[] args) {
