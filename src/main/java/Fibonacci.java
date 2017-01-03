@@ -1,3 +1,5 @@
+import java.util.stream.Stream;
+
 /**
  * Created by saoprb on 11/26/2016.
  */
@@ -29,5 +31,11 @@ public class Fibonacci {
         app.fib(20);
         System.out.println("");
         app.fibRecursive(20);
+        System.out.println("");
+        app.fibLambda(20);
+    }
+
+    public static void fibLambda(int limit) {
+        Stream.iterate(new int[]{1,1}, p -> new int[]{p[1],p[1]+p[0]}).limit(limit).forEach(p -> System.out.print(p[0]+" "));
     }
 }
