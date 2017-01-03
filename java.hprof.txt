@@ -1,0 +1,211 @@
+JAVA PROFILE 1.0.1, created Tue Jan  3 07:36:38 2017
+
+Copyright (c) 2003, 2005, Oracle and/or its affiliates. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+  - Neither the name of Oracle nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Header for -agentlib:hprof (or -Xrunhprof) ASCII Output (JDK 5.0 JVMTI based)
+
+WARNING!  This file format is under development, and is subject to
+change without notice.
+
+This file contains the following types of records:
+
+THREAD START
+THREAD END      mark the lifetime of Java threads
+
+TRACE           represents a Java stack trace.  Each trace consists
+                of a series of stack frames.  Other records refer to
+                TRACEs to identify (1) where object allocations have
+                taken place, (2) the frames in which GC roots were
+                found, and (3) frequently executed methods.
+
+HEAP DUMP       is a complete snapshot of all live objects in the Java
+                heap.  Following distinctions are made:
+
+                ROOT    root set as determined by GC
+                CLS     classes 
+                OBJ     instances
+                ARR     arrays
+
+SITES           is a sorted list of allocation sites.  This identifies
+                the most heavily allocated object types, and the TRACE
+                at which those allocations occurred.
+
+CPU SAMPLES     is a statistical profile of program execution.  The VM
+                periodically samples all running threads, and assigns
+                a quantum to active TRACEs in those threads.  Entries
+                in this record are TRACEs ranked by the percentage of
+                total quanta they consumed; top-ranked TRACEs are
+                typically hot spots in the program.
+
+CPU TIME        is a profile of program execution obtained by measuring
+                the time spent in individual methods (excluding the time
+                spent in callees), as well as by counting the number of
+                times each method is called. Entries in this record are
+                TRACEs ranked by the percentage of total CPU time. The
+                "count" field indicates the number of times each TRACE 
+                is invoked.
+
+MONITOR TIME    is a profile of monitor contention obtained by measuring
+                the time spent by a thread waiting to enter a monitor.
+                Entries in this record are TRACEs ranked by the percentage
+                of total monitor contention time and a brief description
+                of the monitor.  The "count" field indicates the number of 
+                times the monitor was contended at that TRACE.
+
+MONITOR DUMP    is a complete snapshot of all the monitors and threads in 
+                the System.
+
+HEAP DUMP, SITES, CPU SAMPLES|TIME and MONITOR DUMP|TIME records are generated 
+at program exit.  They can also be obtained during program execution by typing 
+Ctrl-\ (on Solaris) or by typing Ctrl-Break (on Win32).
+
+--------
+
+THREAD START (obj=50000193, id = 200001, name="main", group="main")
+THREAD START (obj=50000193, id = 200004, name="Monitor Ctrl-Break", group="main")
+THREAD END (id = 200001)
+THREAD START (obj=50000193, id = 200005, name="DestroyJavaVM", group="main")
+THREAD END (id = 200005)
+TRACE 300142:
+	java.net.PlainSocketImpl.socketAccept(PlainSocketImpl.java:Unknown line)
+	java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:409)
+	java.net.ServerSocket.implAccept(ServerSocket.java:545)
+	java.net.ServerSocket.accept(ServerSocket.java:513)
+	com.intellij.rt.execution.application.AppMain$1.run(AppMain.java:79)
+	java.lang.Thread.run(Thread.java:745)
+TRACE 300141:
+	HprofTest.makeString(HprofTest.java:12)
+	HprofTest.main(HprofTest.java:57)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:498)
+TRACE 300144:
+	java.lang.StringBuilder.append(StringBuilder.java:136)
+	HprofTest.addToCat(HprofTest.java:18)
+	HprofTest.makeString(HprofTest.java:13)
+	HprofTest.main(HprofTest.java:57)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+TRACE 300146:
+	HprofTest.makeStringInline(HprofTest.java:24)
+	HprofTest.main(HprofTest.java:58)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:498)
+TRACE 300147:
+	HprofTest.makeStringInline(HprofTest.java:23)
+	HprofTest.main(HprofTest.java:58)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:498)
+TRACE 300149:
+	HprofTest.makeStringWithLocal(HprofTest.java:30)
+	HprofTest.main(HprofTest.java:59)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:498)
+TRACE 300150:
+	HprofTest.makeStringWithLocal(HprofTest.java:31)
+	HprofTest.main(HprofTest.java:59)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:498)
+TRACE 300037:
+	sun.misc.Perf.createLong(Perf.java:Unknown line)
+	sun.misc.PerfCounter.<init>(PerfCounter.java:65)
+	sun.misc.PerfCounter.newPerfCounter(PerfCounter.java:71)
+	sun.misc.PerfCounter$CoreCounters.<clinit>(PerfCounter.java:128)
+	sun.misc.PerfCounter.getZipFileOpenTime(PerfCounter.java:182)
+	java.util.zip.ZipFile.<init>(ZipFile.java:220)
+TRACE 300076:
+	java.util.regex.Pattern.newSingle(Pattern.java:3358)
+	java.util.regex.Pattern.atom(Pattern.java:2231)
+	java.util.regex.Pattern.sequence(Pattern.java:2130)
+	java.util.regex.Pattern.expr(Pattern.java:1996)
+	java.util.regex.Pattern.compile(Pattern.java:1696)
+	java.util.regex.Pattern.<init>(Pattern.java:1351)
+TRACE 300118:
+	sun.misc.Unsafe.getObjectVolatile(Unsafe.java:Unknown line)
+	java.util.concurrent.ConcurrentHashMap.tabAt(ConcurrentHashMap.java:755)
+	java.util.concurrent.ConcurrentHashMap.transfer(ConcurrentHashMap.java:2421)
+	java.util.concurrent.ConcurrentHashMap.addCount(ConcurrentHashMap.java:2288)
+	java.util.concurrent.ConcurrentHashMap.putVal(ConcurrentHashMap.java:1070)
+	java.util.concurrent.ConcurrentHashMap.putIfAbsent(ConcurrentHashMap.java:1535)
+TRACE 300143:
+	java.lang.String.<init>(String.java:207)
+	java.lang.StringBuilder.toString(StringBuilder.java:407)
+	HprofTest.addToCat(HprofTest.java:18)
+	HprofTest.makeString(HprofTest.java:13)
+	HprofTest.main(HprofTest.java:57)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+TRACE 300145:
+	java.util.Arrays.copyOf(Arrays.java:3332)
+	java.lang.AbstractStringBuilder.ensureCapacityInternal(AbstractStringBuilder.java:124)
+	java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:448)
+	java.lang.StringBuilder.append(StringBuilder.java:136)
+	HprofTest.addToCat(HprofTest.java:18)
+	HprofTest.makeString(HprofTest.java:13)
+TRACE 300148:
+	HprofTest.makeStringInline(HprofTest.java:24)
+	HprofTest.main(HprofTest.java:58)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:Unknown line)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:498)
+TRACE 300151:
+	java.util.Arrays.copyOf(Arrays.java:3332)
+	java.lang.AbstractStringBuilder.ensureCapacityInternal(AbstractStringBuilder.java:124)
+	java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:448)
+	java.lang.StringBuilder.append(StringBuilder.java:136)
+	HprofTest.makeStringWithLocal(HprofTest.java:31)
+	HprofTest.main(HprofTest.java:59)
+CPU SAMPLES BEGIN (total = 35) Tue Jan  3 07:36:39 2017
+rank   self  accum   count trace method
+   1 45.71% 45.71%      16 300142 java.net.PlainSocketImpl.socketAccept
+   2  5.71% 51.43%       2 300141 HprofTest.makeString
+   3  5.71% 57.14%       2 300144 java.lang.StringBuilder.append
+   4  5.71% 62.86%       2 300146 HprofTest.makeStringInline
+   5  5.71% 68.57%       2 300147 HprofTest.makeStringInline
+   6  5.71% 74.29%       2 300149 HprofTest.makeStringWithLocal
+   7  5.71% 80.00%       2 300150 HprofTest.makeStringWithLocal
+   8  2.86% 82.86%       1 300037 sun.misc.Perf.createLong
+   9  2.86% 85.71%       1 300076 java.util.regex.Pattern.newSingle
+  10  2.86% 88.57%       1 300118 sun.misc.Unsafe.getObjectVolatile
+  11  2.86% 91.43%       1 300143 java.lang.String.<init>
+  12  2.86% 94.29%       1 300145 java.util.Arrays.copyOf
+  13  2.86% 97.14%       1 300148 HprofTest.makeStringInline
+  14  2.86% 100.00%       1 300151 java.util.Arrays.copyOf
+CPU SAMPLES END
